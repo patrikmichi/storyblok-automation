@@ -1,0 +1,35 @@
+{
+  "name": "business_type_card",
+  "display_name": "Business Type Card",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "headline": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "description": "Business type headline (e.g., \"HR people\")"
+    },
+    "description": {
+      "type": "textarea",
+      "required": false,
+      "pos": 1,
+      "description": "Business type description"
+    },
+    "tags": {
+      "type": "textarea",
+      "required": false,
+      "pos": 2,
+      "description": "Tags/chips (one per line or comma-separated)"
+    },
+    "image": {
+      "type": "asset",
+      "required": false,
+      "pos": 3,
+      "description": "Business type image",
+      "filetypes": [
+        "images"
+      ]
+    }
+  }
+}

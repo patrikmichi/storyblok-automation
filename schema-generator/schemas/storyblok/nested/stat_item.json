@@ -1,0 +1,22 @@
+{
+  "name": "stat_item",
+  "display_name": "Stat Item",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "number": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "default_value": "NN",
+      "description": "Stat number or value"
+    },
+    "description": {
+      "type": "text",
+      "required": true,
+      "pos": 1,
+      "default_value": "Description",
+      "description": "Stat description text"
+    }
+  }
+}

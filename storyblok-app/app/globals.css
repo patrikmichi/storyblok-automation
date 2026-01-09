@@ -1,0 +1,4 @@
+/* This file is kept for backward compatibility but styles are now in styles/globals.css */
+/* Import the new global styles */
+@import '../styles/globals.css';
+

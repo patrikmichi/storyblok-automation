@@ -1,0 +1,58 @@
+{
+  "name": "benefit_item",
+  "display_name": "Benefit Item",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "icon": {
+      "type": "asset",
+      "required": false,
+      "pos": 0,
+      "description": "Icon image for the benefit",
+      "filetypes": [
+        "images"
+      ]
+    },
+    "headline": {
+      "type": "text",
+      "required": true,
+      "pos": 1,
+      "description": "Benefit headline"
+    },
+    "description": {
+      "type": "textarea",
+      "required": false,
+      "pos": 2,
+      "description": "Benefit description"
+    },
+    "link": {
+      "type": "multilink",
+      "required": false,
+      "pos": 3,
+      "description": "Optional link for the benefit"
+    },
+    "link_label": {
+      "type": "text",
+      "required": false,
+      "pos": 4,
+      "description": "Link label text (shown if link is provided)"
+    },
+    "light_dark": {
+      "type": "option",
+      "required": false,
+      "pos": 5,
+      "default_value": "false",
+      "options": [
+        {
+          "value": "false",
+          "name": "Light"
+        },
+        {
+          "value": "true",
+          "name": "Dark"
+        }
+      ],
+      "description": "Use dark/light variant (for dark backgrounds)"
+    }
+  }
+}

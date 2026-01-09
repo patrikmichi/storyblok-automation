@@ -1,0 +1,4 @@
+Figma design context for stats_section - node-id: 19:574
+Component structure: Stats section with nested stat items
+Layout: Header (headline + subtext) + Grid of stat items
+Stat item structure: Number and description

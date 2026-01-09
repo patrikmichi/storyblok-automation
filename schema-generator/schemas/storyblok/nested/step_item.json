@@ -1,0 +1,21 @@
+{
+  "name": "step_item",
+  "display_name": "Step Item",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "step_headline": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "description": "Step headline"
+    },
+    "description": {
+      "type": "textarea",
+      "required": false,
+      "pos": 1,
+      "description": "Step description"
+    }
+  }
+}
+

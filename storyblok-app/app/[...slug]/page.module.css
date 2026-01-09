@@ -1,0 +1,22 @@
+.page {
+  min-height: 100vh;
+  background-color: #FFFFFF;
+}
+
+.draftBanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #FCD34D;
+  color: #000000;
+  text-align: center;
+  padding: 8px 0;
+  z-index: 50;
+}
+
+.draftLink {
+  margin-left: 8px;
+  text-decoration: underline;
+}
+

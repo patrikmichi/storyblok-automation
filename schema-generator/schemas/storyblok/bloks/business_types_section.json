@@ -1,0 +1,118 @@
+{
+  "name": "business_types_section",
+  "display_name": "Business Types Section",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "headline": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "description": "Main section headline"
+    },
+    "heading_level": {
+      "type": "option",
+      "required": false,
+      "pos": 1,
+      "default_value": "h2",
+      "options": [
+        {
+          "value": "h1",
+          "name": "H1"
+        },
+        {
+          "value": "h2",
+          "name": "H2"
+        },
+        {
+          "value": "h3",
+          "name": "H3"
+        },
+        {
+          "value": "h4",
+          "name": "H4"
+        },
+        {
+          "value": "h5",
+          "name": "H5"
+        },
+        {
+          "value": "h6",
+          "name": "H6"
+        }
+      ],
+      "description": "Heading tag level"
+    },
+    "subtext": {
+      "type": "textarea",
+      "required": false,
+      "pos": 2,
+      "description": "Section description/subtext"
+    },
+    "show_subtext": {
+      "type": "boolean",
+      "required": false,
+      "pos": 3,
+      "default_value": true,
+      "description": "Show/hide subtext"
+    },
+    "alignment": {
+      "type": "option",
+      "required": false,
+      "pos": 4,
+      "default_value": "Center",
+      "options": [
+        {
+          "value": "Left",
+          "name": "Left"
+        },
+        {
+          "value": "Center",
+          "name": "Center"
+        }
+      ],
+      "description": "Text alignment for header"
+    },
+    "background": {
+      "type": "option",
+      "required": false,
+      "pos": 5,
+      "default_value": "White",
+      "options": [
+        {
+          "value": "White",
+          "name": "White"
+        },
+        {
+          "value": "Grey",
+          "name": "Grey"
+        }
+      ],
+      "description": "Section background color"
+    },
+    "padding_top": {
+      "type": "number",
+      "required": false,
+      "pos": 6,
+      "default_value": 96,
+      "description": "Padding top in pixels"
+    },
+    "padding_bottom": {
+      "type": "number",
+      "required": false,
+      "pos": 7,
+      "default_value": 96,
+      "description": "Padding bottom in pixels"
+    },
+    "business_cards": {
+      "type": "bloks",
+      "required": false,
+      "pos": 8,
+      "description": "List of business type cards",
+      "restrict_components": true,
+      "component_whitelist": [
+        "business_type_card"
+      ]
+    }
+  }
+}

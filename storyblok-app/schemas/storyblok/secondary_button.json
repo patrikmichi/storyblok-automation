@@ -1,0 +1,45 @@
+{
+  "name": "secondary_button",
+  "display_name": "Secondary Button",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "label": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "default_value": "Button",
+      "description": "Button label"
+    },
+    "link": {
+      "type": "multilink",
+      "required": true,
+      "pos": 1,
+      "description": "Button link (URL or page)",
+      "allow_target_blank": true,
+      "link_type": [
+        "url",
+        "story",
+        "email"
+      ]
+    },
+    "variant": {
+      "type": "option",
+      "required": false,
+      "pos": 2,
+      "default_value": "On Dark",
+      "options": [
+        {
+          "value": "On Dark",
+          "name": "On Dark"
+        },
+        {
+          "value": "On Light",
+          "name": "On Light"
+        }
+      ],
+      "description": "Button variant for different backgrounds"
+    }
+  }
+}
+

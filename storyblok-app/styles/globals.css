@@ -1,0 +1,43 @@
+@import './tokens.css';
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--color-white) !important;
+  color-scheme: light !important;
+}
+
+body {
+  background: var(--color-white) !important;
+  color: var(--color-grey-800) !important;
+  font-family: var(--font-family-base);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Override any dark mode preferences */
+@media (prefers-color-scheme: dark) {
+  html {
+    background: var(--color-white) !important;
+    color-scheme: light !important;
+  }
+  
+  body {
+    background: var(--color-white) !important;
+    color: var(--color-grey-800) !important;
+  }
+}
+
+/* Force white background on Next.js containers */
+#__next,
+[data-nextjs-scroll-focus-boundary] {
+  background: var(--color-white) !important;
+  color: var(--color-grey-800) !important;
+}
+

@@ -1,0 +1,63 @@
+/* Shared Section Header - Used across all sections */
+
+.headerWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.headerWrapperLeft {
+  justify-content: flex-start;
+}
+
+.headerWrapperCenter {
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 800px;
+  min-width: 0;
+  width: 800px;
+}
+
+.headerCenter {
+  align-items: center;
+  text-align: center;
+}
+
+.headerLeft {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.headline {
+  font-family: 'Venn', sans-serif;
+  font-weight: 700;
+  line-height: 48px;
+  font-size: 40px;
+  color: #161616;
+  width: 100%;
+}
+
+.headlineDark {
+  color: #FFFFFF;
+}
+
+.subtext {
+  font-family: 'Venn', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  color: #464646;
+  width: 100%;
+}
+
+.subtextDark {
+  color: #EFEFEF;
+  opacity: 0.72;
+}

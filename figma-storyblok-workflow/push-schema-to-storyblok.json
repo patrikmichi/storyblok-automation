@@ -1,0 +1,371 @@
+{
+  "name": "Push Schema to Storyblok",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "push-schema",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 300],
+      "webhookId": "storyblok-schema-push"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "space-id",
+              "name": "spaceId",
+              "value": "YOUR_SPACE_ID",
+              "type": "string"
+            },
+            {
+              "id": "management-token",
+              "name": "managementToken",
+              "value": "YOUR_MANAGEMENT_TOKEN",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "keepOnlySet": false
+        }
+      },
+      "id": "set-credentials",
+      "name": "Set Credentials",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get webhook body - read from Webhook node directly to get original data\nconst webhookData = $('Webhook').item.json;\n\n// Handle different webhook body formats\nlet body = webhookData;\n\n// n8n webhook can send data in different formats\nif (body.body) {\n  body = typeof body.body === 'string' ? JSON.parse(body.body) : body.body;\n} else if (body.json) {\n  body = typeof body.json === 'string' ? JSON.parse(body.json) : body.json;\n} else if (body.data) {\n  body = typeof body.data === 'string' ? JSON.parse(body.data) : body.data;\n}\n\n// Validate required fields\nif (!body || !body.name || !body.schema) {\n  const missing = [];\n  if (!body) missing.push('body');\n  if (!body?.name) missing.push('name');\n  if (!body?.schema) missing.push('schema');\n  throw new Error(`Missing required fields: ${missing.join(', ')}. Received from webhook: ${JSON.stringify(webhookData).substring(0, 200)}`);\n}\n\n// Get credentials from Set Credentials node (which adds them to the data)\nconst credentials = $('Set Credentials').item.json;\nconst spaceId = credentials.spaceId || body.spaceId;\nconst managementToken = credentials.managementToken || body.managementToken;\n\nif (!spaceId || !managementToken) {\n  throw new Error('Space ID and Management Token are required. Set them in \"Set Credentials\" node or pass in webhook body.');\n}\n\n// Prepare component data for Storyblok\nconst component = {\n  name: body.name,\n  display_name: body.display_name || body.name,\n  is_nestable: body.is_nestable !== undefined ? body.is_nestable : true,\n  is_root: body.is_root !== undefined ? body.is_root : false,\n  schema: body.schema\n};\n\nreturn {\n  json: {\n    componentName: body.name,\n    component: component,\n    spaceId: spaceId,\n    managementToken: managementToken\n  }\n};"
+      },
+      "id": "process-schema",
+      "name": "Process Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://mapi.storyblok.com/v1/spaces/{{ $('Process Schema').item.json.spaceId }}/components",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $('Process Schema').item.json.managementToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {}
+      },
+      "id": "list-components",
+      "name": "List Components",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "id": "component-exists",
+                "leftValue": "={{ $json.components ? $json.components.find(c => c.name === $('Process Schema').item.json.componentName) : null }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "any",
+                  "operation": "notEmpty"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+        "options": {}
+      },
+      "id": "check-exists",
+      "name": "Component Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://mapi.storyblok.com/v1/spaces/{{ $('Process Schema').item.json.spaceId }}/components/{{ $json.components.find(c => c.name === $('Process Schema').item.json.componentName).id }}",
+        "method": "PUT",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $('Process Schema').item.json.managementToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "specifyBody": "json",
+        "jsonBody": "={{ { component: $('Process Schema').item.json.component } }}",
+        "options": {}
+      },
+      "id": "update-component",
+      "name": "Update Component",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://mapi.storyblok.com/v1/spaces/{{ $('Process Schema').item.json.spaceId }}/components",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $('Process Schema').item.json.managementToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "specifyBody": "json",
+        "jsonBody": "={{ $('Process Schema').item.json.component }}",
+        "options": {}
+      },
+      "id": "create-component",
+      "name": "Create Component",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const componentName = $('Process Schema').item.json.componentName;\nconst response = $input.item.json;\n\n// Handle both update and create responses\nconst componentId = response.component?.id || response.id || response.component_id;\nconst action = response.component ? 'updated' : 'created';\n\nreturn {\n  json: {\n    success: true,\n    message: `Component '${componentName}' ${action} successfully`,\n    componentName: componentName,\n    componentId: componentId,\n    data: response\n  }\n};"
+      },
+      "id": "format-success",
+      "name": "Format Success",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1650, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const error = $input.item.json.error || $input.item.json;\nconst errorMessage = error.message || error.error?.message || 'Unknown error';\nconst componentName = $('Process Schema')?.item?.json?.componentName || 'unknown';\n\nreturn {\n  json: {\n    success: false,\n    message: `Failed to push component '${componentName}'`,\n    error: errorMessage,\n    details: error\n  }\n};"
+      },
+      "id": "format-error",
+      "name": "Format Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 500]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond-error",
+      "name": "Respond Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1450, 500]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Credentials": {
+      "main": [
+        [
+          {
+            "node": "Process Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Schema": {
+      "main": [
+        [
+          {
+            "node": "List Components",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Format Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Components": {
+      "main": [
+        [
+          {
+            "node": "Component Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Format Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Component Exists?": {
+      "main": [
+        [
+          {
+            "node": "Update Component",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Component",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Component": {
+      "main": [
+        [
+          {
+            "node": "Format Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Format Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Component": {
+      "main": [
+        [
+          {
+            "node": "Format Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Format Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Success": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Error": {
+      "main": [
+        [
+          {
+            "node": "Respond Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "versionId": "1"
+}
+

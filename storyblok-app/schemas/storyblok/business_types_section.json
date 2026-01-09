@@ -1,0 +1,54 @@
+{
+  "name": "business_types_section",
+  "display_name": "Business Types Section",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "headline": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "description": "Main section headline"
+    },
+    "subtext": {
+      "type": "textarea",
+      "required": false,
+      "pos": 1,
+      "description": "Section description/subtext"
+    },
+    "show_subtext": {
+      "type": "boolean",
+      "required": false,
+      "pos": 2,
+      "default_value": true,
+      "description": "Show/hide subtext"
+    },
+    "background": {
+      "type": "option",
+      "required": false,
+      "pos": 3,
+      "default_value": "White",
+      "options": [
+        {
+          "value": "White",
+          "name": "White"
+        },
+        {
+          "value": "Grey",
+          "name": "Grey"
+        }
+      ],
+      "description": "Section background color"
+    },
+    "business_cards": {
+      "type": "bloks",
+      "required": false,
+      "pos": 4,
+      "description": "List of business type cards",
+      "restrict_components": true,
+      "component_whitelist": [
+        "business_type_card"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+/* Stat Item - Exact Figma specs */
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  text-align: center;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.number {
+  font-family: 'Venn', sans-serif;
+  font-weight: 700;
+  line-height: 72px;
+  font-size: 64px;
+  color: #161616;
+  width: 100%;
+}
+
+.description {
+  font-family: 'Venn', sans-serif;
+  font-weight: 400;
+  line-height: 32px;
+  font-size: 20px;
+  color: #464646;
+  width: 100%;
+}
+
+/* Dark mode styles */
+.statItemDark .number {
+  color: #FFFFFF;
+}
+
+.statItemDark .description {
+  color: #FFFFFF;
+  opacity: 0.72;
+}

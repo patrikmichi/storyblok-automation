@@ -1,0 +1,5 @@
+Figma design context for data_security_section - node-id: 11:1347
+Component structure: DataSecurity section with nested CardSecurityCertification cards
+Layout: Header (headline + subtext) + Grid of security cards (2 rows, 3 columns)
+Card structure: Image, headline, subtext, optional link
+Card variants: Shadow, Border, Dark

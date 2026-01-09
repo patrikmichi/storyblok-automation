@@ -1,0 +1,84 @@
+{
+  "name": "cta_section",
+  "display_name": "CTA Section",
+  "is_nestable": true,
+  "is_root": false,
+  "schema": {
+    "headline": {
+      "type": "text",
+      "required": true,
+      "pos": 0,
+      "description": "Main CTA headline"
+    },
+    "subtext": {
+      "type": "textarea",
+      "required": false,
+      "pos": 1,
+      "description": "CTA description/subtext"
+    },
+    "show_subtext": {
+      "type": "boolean",
+      "required": false,
+      "pos": 2,
+      "default_value": true,
+      "description": "Show/hide subtext"
+    },
+    "primary_button": {
+      "type": "bloks",
+      "required": false,
+      "pos": 3,
+      "description": "Primary button component",
+      "restrict_components": true,
+      "component_whitelist": [
+        "primary_button"
+      ],
+      "maximum": 1
+    },
+    "secondary_button": {
+      "type": "bloks",
+      "required": false,
+      "pos": 4,
+      "description": "Secondary button component",
+      "restrict_components": true,
+      "component_whitelist": [
+        "secondary_button"
+      ],
+      "maximum": 1
+    },
+    "container": {
+      "type": "option",
+      "required": false,
+      "pos": 5,
+      "default_value": "Container",
+      "options": [
+        {
+          "value": "Container",
+          "name": "Container"
+        },
+        {
+          "value": "FW",
+          "name": "Full Width"
+        }
+      ],
+      "description": "Container type"
+    },
+    "graphics": {
+      "type": "option",
+      "required": false,
+      "pos": 6,
+      "default_value": "Colors",
+      "options": [
+        {
+          "value": "Colors",
+          "name": "Colors"
+        },
+        {
+          "value": "Opacity",
+          "name": "Opacity"
+        }
+      ],
+      "description": "Graphics style"
+    }
+  }
+}
+
